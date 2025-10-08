@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anakin Ryan</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&family=BBH+Sans+Bogle&family=Bebas+Neue&family=Caveat:wght@600&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+DE+SAS:wght@100..400&family=Poiret+One&family=Questrial&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slider{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #dbdbdb;
+    }
+
+    .slide{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .slide.dark{
+      background: #000;
+    }
+
+    .slide.light{
+      background: #dbdbdb;
+    }
+
+    .slide-content{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      font-family: "Bebas Neue",sans-serif;
+      font-size: 6vw;
+      text-transform: uppercase;
+      font-weight: lighter;
+      color:crimson;
+      text-decoration: transparent;
+      z-index: 3;
+    }
+
+    .slide.light .slide-content{
+      color: #000;
+      text-decoration: transparent;
+    }
+
+    .slide-img {
+      position: absolute;
+      width: 360px;
+      height: 150vh;
+      filter: saturate(0.9);
+    }
+
+    .slide-img img{
+      position: absolute;
+      border-radius: 15px;
+      top:50%;
+      transform: translateY(-50%);
+      width: 329px;
+      height: 570px; 
+    }
+
+    .slide-img-1{
+      top: 50%;
+      left: 88%;
+      transform: translate(-50%,-50%) rotate(0deg);
+    }
+
+    .slide-img-2{
+      top: 50%;
+      left:14%;
+      transform: translate(-50%,-50%) rotate(0deg);
+    }
+
+    .slide-img-3{
+      top: 50%;
+      left:50%;
+      transform: translate(-50%,-50%) rotate(-20deg);
+    }
+    .slide-img-4{
+      top: 50%;
+      left:50%;
+      transform: translate(-50%,-50%) rotate(20deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <div class="slide dark">
+      <div class="slide-img slide-img-1">
+        <img src="/assets/slider-1-1.jpg" alt="Nature 1">
+      </div>
+      <div class="slide-content">
+        <h1>Ducati V4R</h1>
+      </div>
+      <div class="slide-img slide-img-2">
+         <img src="/assets/slider-2-1.jpg" alt="Nature 2">
+      </div>
+      <div class="slide-img slide-img-3">
+         <img src="/assets/slider-3-1.jpg" alt="Nature 3">
+      </div>
+      <div class="slide-img slide-img-4">
+         <img src="/assets/slider-4-1.jpg" alt="Nature 4">
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const sliderContent = [
+        "About Me",
+        "Top speed",
+        "Ducati's Passion",
+        "Other Models",
+        "Participation In Motorsport",
+        "Engine's"
+      ];
+
+      const slider = document.querySelector(".slider");
+      let activeSlide = 0;
+
+      document.addEventListener("click", function() {
+        const currentSlide = slider.querySelector(".slide:not(.exiting)");
+        const slideTheme = activeSlide % 2 ? "dark" : "light";
+        activeSlide = (activeSlide + 1) % sliderContent.length;
+
+        if(currentSlide) {
+          const exitingImgs = currentSlide.querySelectorAll("img");
+          gsap.to(exitingImgs, {
+            top: "0%",
+            duration: 1.5,
+            ease: "power4.inOut"
+          });
+          currentSlide.classList.add("exiting");
+        }
+
+        const newSlide = document.createElement("div");
+        newSlide.classList.add("slide");
+        newSlide.classList.add(slideTheme);
+        newSlide.style.clipPath = "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)";
+
+        // Create first image
+        const newSlideImg1 = document.createElement("div");
+        newSlideImg1.className = "slide-img slide-img-1";
+        const img1 = document.createElement("img");
+        img1.src = `/assets/slider-${activeSlide + 1}-1.jpg`;
+        img1.style.top = "100%";
+        newSlideImg1.appendChild(img1);
+        newSlide.appendChild(newSlideImg1);
+
+        // Create content
+        const newSlideContent = document.createElement("div");
+        newSlideContent.classList.add("slide-content");
+        newSlideContent.innerHTML = `<h1 style="transform: scale(1.5)">${sliderContent[activeSlide]}</h1>`;
+        newSlide.appendChild(newSlideContent);
+
+        // Create second image
+        const newSlideImg2 = document.createElement("div");
+        newSlideImg2.className = "slide-img slide-img-2";
+        const img2 = document.createElement("img");
+        img2.src = `/assets/slider-${activeSlide + 1}-2.jpg`;
+        img2.style.top = "100%";
+        newSlideImg2.appendChild(img2);
+        newSlide.appendChild(newSlideImg2);
+
+        // Create third image
+        const newSlideImg3 = document.createElement("div");
+        newSlideImg3.className = "slide-img slide-img-3";
+        const img3 = document.createElement("img");
+        img3.src = `/assets/slider-${activeSlide + 1}-3.jpg`;
+        img3.style.top = "100%";
+        newSlideImg3.appendChild(img3);
+        newSlide.appendChild(newSlideImg3);
+
+        // Create fourth image
+        const newSlideImg4 = document.createElement("div");
+        newSlideImg4.className = "slide-img slide-img-4";
+        const img4 = document.createElement("img");
+        img4.src = `/assets/slider-${activeSlide + 1}-4.jpg`;
+        img4.style.top = "100%";
+        newSlideImg4.appendChild(img4);
+        newSlide.appendChild(newSlideImg4);
+
+        slider.appendChild(newSlide);
+
+        gsap.to(newSlide, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          duration: 1.5,
+          ease: "power4.inOut",
+          onStart: () => {
+            gsap.to([img1, img2, img3, img4], {
+              top: "50%",
+              duration: 1.5,
+              ease: "power4.inOut"
+            });
+          },
+          onComplete: () => {
+            removeExtraSlide(slider);
+          }
+        });
+        
+        gsap.to(newSlideContent.querySelector("h1"), {
+          scale: 1,
+          duration: 1.5,
+          ease: "power4.inOut"
+        });
+      });
+
+      function removeExtraSlide(container) {
+        while(container.children.length > 5) {
+          container.removeChild(container.firstChild);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
